@@ -30,6 +30,7 @@ app.post('/upload', (req, res, next) => {
         req.busboy.on("file", function(fieldName, fileStream, fileName, encoding, mimeType) {
             //Handle file stream here
             // console.log(mimeType);
+            res.json(data);
             if (mimeType == "audio/mpeg") {
             	console.log("audio");
             } else if (mimeType == "text/plain") {
@@ -43,6 +44,7 @@ app.post('/upload', (req, res, next) => {
         });
         return req.pipe(req.busboy);
     }
+    res.json("WRONG");
     console.log("SOMETHING WENT WRONG")	
 });
 
