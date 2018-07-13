@@ -16,7 +16,7 @@ app.use(busboy());
 app.get('/:name', (req, res) => {
 	const hello = "hi ";
 	var name = req.params.name;
-	
+
 
 	// Return them as json
   	res.json(hello+name);
@@ -40,12 +40,11 @@ app.post('/upload', (req, res, next) => {
 	            	res.json(data);
 	            });
             }
-            
+
         });
         return req.pipe(req.busboy);
     }
-    res.json("WRONG");
-    console.log("SOMETHING WENT WRONG")	
+    console.log("SOMETHING WENT WRONG")
 });
 
 // The "catchall" handler: for any request that doesn't
