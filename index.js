@@ -2,50 +2,45 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
-var busboy = require('connect-busboy');
+var exec = require('child_process').exec;
+
 
 const app = express();
 app.use(bodyParser.urlencoded({extended:false})); //handle body requests
 app.use(bodyParser.json()); // let's make JSON work too!
-app.use(busboy());
+
 
 // Serve static files from the React app
 // app.use(express.static(path.join(__dirname, 'client/build')));
 
 // Put all API endpoints under '/api'
-app.get('/:name', (req, res) => {
-	const hello = "hi ";
-	var name = req.params.name;
-
-
-	// Return them as json
-  	res.json(hello+name);
-  	console.log(`Sent ${hello} message to ${name}`);
+app.get('/', (req, res) => {
+	var command = "python pythonexample.py"
+	var child = exec(command,
+		function (error, stdout, stderr){
+			console.log('Output -> ' + stdout);
+			if(error !== null){
+				console.log("Error -> "+error);
+			}
+	});
+  	console.log(`running the python file...`);
 	});
 
-// Upload
-app.post('/upload', (req, res, next) => {
-	console.log("sending file???");
-	if(req.busboy) {
-        req.busboy.on("file", function(fieldName, fileStream, fileName, encoding, mimeType) {
-            //Handle file stream here
-            // console.log(mimeType);
-            res.json(data);
-            if (mimeType == "audio/mpeg") {
-            	console.log("audio");
-            } else if (mimeType == "text/plain") {
-            	console.log("text")
-            	fileStream.setEncoding('utf-8');
-	            fileStream.on('data', function(data) {
-	            	res.json(data);
-	            });
-            }
+app.post('/upload', (req, res) => {
+		console.log("recognizing");
+		var folder = req.body.folder;
+		res.send(folder);
+		var command = "java -jar epa.recognizer.jar " + folder + " " + folder;
+		// var command = ;
+		var child = exec(command,
+		  function (error, stdout, stderr){
+		    console.log('Output -> ' + stdout);
+		    if(error !== null){
+		      console.log("Error -> "+error);
+		    }
+		});
 
-        });
-        return req.pipe(req.busboy);
-    }
-    console.log("SOMETHING WENT WRONG")
-});
+	});
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
