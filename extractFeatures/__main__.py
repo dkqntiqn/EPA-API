@@ -11,7 +11,6 @@ from calculateETSFeatures import ETSFeat
 import pandas as pd
 from writeDataframe import writeExcel, makeDataframe
 from calculateTimeFeature import getSegmentationFeatures
-import argparse
 
 import numpy as np
 import os,sys, pickle, sklearn
@@ -34,7 +33,7 @@ def main(folder):
     aligned_mlf = None
     recog_mlf = None
     for file in mlf_ls:
-        if file.endswith(".mlf") and file.startswith("."):
+        if file.endswith(".mlf") and file.startswith("aligned"):
             aligned_mlf = file
         elif file.endswith(".mlf"):
             recog_mlf = file
@@ -42,7 +41,6 @@ def main(folder):
         print("two mlf files are needed")
         return "Error Occured"
 
-    print("READING MLF")
     aliMLF = readMLF(aligned_mlf, folder, 'align')
     # print(aliMLF.df())
     etsMLF = ETSFeat(aliMLF.df())
@@ -61,5 +59,4 @@ def main(folder):
     # writeExcel(df, './results/sample_Features.xlsx')
 
 if __name__ == "__main__":
-    print("hi");
     main(sys.argv[1])

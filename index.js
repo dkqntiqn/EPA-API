@@ -15,32 +15,41 @@ app.use(bodyParser.json()); // let's make JSON work too!
 
 // Put all API endpoints under '/api'
 app.get('/', (req, res) => {
-	var command = "python pythonexample.py"
-	var child = exec(command,
-		function (error, stdout, stderr){
-			console.log('Output -> ' + stdout);
-			if(error !== null){
-				console.log("Error -> "+error);
-			}
-	});
-  	console.log(`running the python file...`);
+	// var command = "python extractFeatures audio"
+	// var child = exec(command,
+	// 	function (error, stdout, stderr){
+	// 		console.log('Output -> ' + stdout);
+	// 		if(error !== null){
+	// 			console.log("Error -> "+error);
+	// 		}
+	// });
+  // 	console.log(`running the python file...`);
 	});
 
 app.post('/upload', (req, res) => {
-		console.log("recognizing");
 		var folder = req.body.folder;
-		res.send(folder);
+		console.log("recognizing"+ folder);
 		var command = "java -jar epa.recognizer.jar " + folder + " " + folder;
 		// var command = ;
 		var child = exec(command,
 		  function (error, stdout, stderr){
-		    console.log('Output -> ' + stdout);
+		    console.log('Ran the recognizer. ' + stdout);
 		    if(error !== null){
 		      console.log("Error -> "+error);
 		    }
 		});
-
-	});
+		child.on('close', function(code) {
+	    	console.log('Predict score');
+				var command2 = "python extractFeatures audio"
+				var child2 = exec(command2,
+					function (error, stdout, stderr){
+						console.log('Output -> ' + stdout);
+						if(error !== null){
+							console.log("Error -> "+error);
+						}
+				});
+			});
+		});
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.

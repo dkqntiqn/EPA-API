@@ -3,7 +3,7 @@ Created on 2016. 7. 17.
 
 @author: oster
 '''
-from readMLF import readMLF
+from readMLF_exec import readMLF
 from numpy import mean
 
 
@@ -52,7 +52,8 @@ def getGOPFeature(aliMLF, recMLF):
     edList_rec = recMLF.end()
     lkList_rec = recMLF.likelihood()
     phoneGOPList = []
-
+    # print(len(phList_ali),len(stList_ali),len(edList_ali),len(lkList_ali),len(stList_rec),len(edList_rec),len(lkList_rec))
+    # print(stList_rec)
     # phoneGOP
     for i in range(len(phList_ali)):
         phAli = phList_ali[i]
